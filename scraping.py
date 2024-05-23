@@ -22,14 +22,24 @@ try:
     driver.get('https://sitios.dane.gov.co/ipc/visorIPC/')
 
     # Espera a que el contenido se cargue (ajusta el tiempo según sea necesario)
-    WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.TAG_NAME, 'body'))
-    )
+    try:
+        WebDriverWait(driver, 20).until(
+            EC.presence_of_element_located((By.TAG_NAME, 'body'))
+        )
 
-    # Extrae el contenido deseado (ajusta los selectores según sea necesario)
-    # Por ejemplo, si quieres extraer una tabla:
-    data_element = driver.find_element(By.CSS_SELECTOR, 'selector_de_elemento')
-    print(data_element.text)
+        # Intenta encontrar el elemento deseado
+        try:
+            # Ajusta el selector al elemento que deseas encontrar
+            data_element = WebDriverWait(driver, 20).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, 'selector_de_elemento'))
+            )
+            print(data_element.text)
+        except NoSuchElementException:
+            print("No se encontró el elemento especificado en la página.")
+        except TimeoutException:
+            print("Se agotó el tiempo de espera para encontrar el elemento.")
+    except TimeoutException:
+        print("Se agotó el tiempo de espera para cargar el contenido de la página.")
 
 finally:
     # Cierra el navegador
