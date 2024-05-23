@@ -1,33 +1,33 @@
 from selenium import webdriver
-from selenium.webdriver.opera.service import Service as OperaService
+from selenium.webdriver.firefox.service import Service as FirefoxService
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import time
 
-# Configura la ubicación del OperaDriver
-opera_driver_path = '/home/jsebastianp/Downloads/operadriver_linux64'
+# Configura la ubicación del GeckoDriver
+gecko_driver_path = '/home/jsebastianp/Downloads/drivers_browser/geckodriver'
 
-# Inicializa el servicio de OperaDriver
-opera_service = OperaService(opera_driver_path)
+# Inicializa el servicio de GeckoDriver
+firefox_service = FirefoxService(gecko_driver_path)
 
-# Configura las opciones del navegador Opera
-opera_options = webdriver.ChromeOptions()
-opera_options.binary_location = '/usr/lib/x86_64-linux-gnu/opera/'
+# Configura las opciones del navegador Firefox (opcional)
+firefox_options = webdriver.FirefoxOptions()
+# firefox_options.add_argument('--headless')  # Ejecución en segundo plano (sin abrir ventana del navegador)
 
-# Inicializa el navegador Opera
-driver = webdriver.Opera(service=opera_service, options=opera_options)
+# Inicializa el navegador Firefox
+driver = webdriver.Firefox(service=firefox_service, options=firefox_options)
 
 try:
     # Abre la página web
     driver.get('https://sitios.dane.gov.co/ipc/visorIPC/')
 
-    # Espera a que el contenido se cargue (puede que necesites ajustar esto según el contenido dinámico)
+    # Espera a que el contenido se cargue (ajusta el tiempo según sea necesario)
     WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.TAG_NAME, 'body'))
     )
 
     # Extrae el contenido deseado (ajusta los selectores según sea necesario)
+    # Por ejemplo, si quieres extraer una tabla:
     data_element = driver.find_element(By.CSS_SELECTOR, 'selector_de_elemento')
     print(data_element.text)
 
